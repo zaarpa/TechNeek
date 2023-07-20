@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
+import { useSignup } from "../../hooks/useSignup";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {signup,error,loading} = useSignup();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordMatchError, setPasswordMatchError] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
         if (password !== confirmPassword) {
         setPasswordMatchError("Passwords do not match.");
       } else {
-        console.log(email, password);
+        await signup(email, password);
       }
   };
     useEffect(() => {
@@ -111,11 +112,12 @@ const Signup = () => {
           </div>
           <div class="flex justify-center">
             <button
-              type="submit" onClick={handleSubmit}
+              type="submit" onClick={handleSubmit} disabled={loading}
               class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Register
             </button>
+            {error && <div className="error">{error}</div>}
           </div>
         </form>
       </div>
